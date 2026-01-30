@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Valentine's Day! 💕</title>
+    <title>Academic Research Study</title>
     <style>
         * {
             margin: 0;
@@ -154,52 +154,165 @@
             animation: bounce 2s ease-in-out infinite 1.5s;
         }
 
-        /* New Front Page Styles */
+        /* New Front Page Styles - Survey Form */
         .front-page {
-            text-align: center;
+            text-align: left;
             z-index: 10;
             padding: 40px;
             animation: fadeIn 1s ease-out;
-            max-width: 600px;
+            max-width: 700px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
-        .front-page h1 {
-            font-size: 2.5em;
-            color: white;
+        .survey-header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
             margin-bottom: 30px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            font-weight: 300;
-            letter-spacing: 2px;
+        }
+
+        .survey-header h1 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+            text-shadow: none;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .survey-header .institution {
+            font-size: 0.95em;
+            color: #666;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+
+        .survey-header .subtitle {
+            font-size: 1em;
+            color: #555;
+            font-style: italic;
+            margin-top: 10px;
         }
 
         .front-page p {
-            font-size: 1.3em;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 40px;
-            line-height: 1.8;
+            font-size: 1em;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .survey-intro {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .survey-intro p {
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .survey-intro p:last-child {
+            margin-bottom: 0;
+        }
+
+        .survey-question {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .survey-question label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .survey-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .survey-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .survey-option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .survey-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .survey-option span {
+            font-size: 0.95em;
+            color: #333;
         }
 
         .front-page-button {
-            background: rgba(255, 255, 255, 0.9);
-            color: #667eea;
+            background: #667eea;
+            color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 8px;
+            padding: 14px 40px;
+            font-size: 1em;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            width: 100%;
+            margin-top: 10px;
         }
 
         .front-page-button:hover {
-            background: white;
+            background: #5568d3;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .front-page-button:active {
             transform: translateY(0);
+        }
+
+        .front-page-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .survey-footer {
+            font-size: 0.85em;
+            color: #888;
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .required-star {
+            color: #dc3545;
+            margin-left: 3px;
         }
 
         /* Landing Page Styles */
@@ -1025,10 +1138,7 @@
             font-size: 1.3em;
         }
 
-        /* ===================================
-           RESPONSIVE DESIGN FOR ALL DEVICES
-           =================================== */
-
+        
         /* Tablets (Portrait and Landscape) */
         @media (max-width: 1024px) {
             .landing-page h1,
@@ -1065,6 +1175,47 @@
 
         /* Large Phones / Small Tablets */
         @media (max-width: 768px) {
+            .front-page {
+                padding: 30px 20px;
+                max-width: 90%;
+            }
+
+            .survey-header h1 {
+                font-size: 1.5em;
+            }
+
+            .survey-header .institution {
+                font-size: 0.9em;
+            }
+
+            .survey-header .subtitle {
+                font-size: 0.95em;
+            }
+
+            .survey-intro {
+                padding: 15px;
+            }
+
+            .survey-intro p {
+                font-size: 0.9em;
+            }
+
+            .survey-question {
+                padding: 15px;
+            }
+
+            .survey-question label {
+                font-size: 1em;
+            }
+
+            .survey-option span {
+                font-size: 0.9em;
+            }
+
+            .survey-footer {
+                font-size: 0.8em;
+            }
+
             .landing-page h1 {
                 font-size: 2.5em;
             }
@@ -1278,6 +1429,66 @@
 
         /* Mobile Phones */
         @media (max-width: 480px) {
+            .front-page {
+                padding: 25px 15px;
+                max-width: 95%;
+                margin: 10px;
+            }
+
+            .survey-header {
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+
+            .survey-header h1 {
+                font-size: 1.3em;
+            }
+
+            .survey-header .institution {
+                font-size: 0.85em;
+            }
+
+            .survey-header .subtitle {
+                font-size: 0.9em;
+            }
+
+            .survey-intro {
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+
+            .survey-intro p {
+                font-size: 0.85em;
+            }
+
+            .survey-question {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .survey-question label {
+                font-size: 0.95em;
+                margin-bottom: 12px;
+            }
+
+            .survey-option {
+                padding: 10px;
+            }
+
+            .survey-option span {
+                font-size: 0.85em;
+            }
+
+            .front-page-button {
+                padding: 12px 30px;
+                font-size: 0.95em;
+            }
+
+            .survey-footer {
+                font-size: 0.75em;
+                margin-top: 20px;
+            }
+
             .landing-page h1 {
                 font-size: 2em;
                 margin-bottom: 20px;
@@ -1632,13 +1843,80 @@
     <div class="cloud" style="top: 15%; animation-delay: 0s;">☁️</div>
     <div class="cloud" style="top: 70%; animation-delay: 10s;">☁️</div>
 
-    <!-- New Front Page -->
+    <!-- New Front Page - Survey Form -->
     <div class="front-page" id="frontPage">
-        <h1>Hello!</h1>
-        <p>I have something I'd like to share with you.</p>
-        <p>Thank you for taking the time to visit.</p>
-        
-        <button class="front-page-button" id="continueButton">Continue</button>
+        <div class="survey-header">
+            <div class="institution">Academic Research Study</div>
+            <h1>Survey on AI Integration in Education</h1>
+            <div class="subtitle">Your feedback helps improve our educational systems</div>
+        </div>
+
+        <div class="survey-intro">
+            <p><strong>Purpose:</strong> This brief survey aims to understand students' perspectives on the integration of Artificial Intelligence tools in classroom settings.</p>
+            <p><strong>Duration:</strong> Approximately 2-3 minutes</p>
+            <p><strong>Confidentiality:</strong> Your responses will be kept anonymous and used solely for research purposes.</p>
+        </div>
+
+        <div class="survey-question">
+            <label>1. Have you used AI tools (like ChatGPT, Gemini, etc.) for academic purposes?<span class="required-star">*</span></label>
+            <div class="survey-options">
+                <label class="survey-option">
+                    <input type="radio" name="q1" value="yes" required>
+                    <span>Yes, frequently</span>
+                </label>
+                <label class="survey-option">
+                    <input type="radio" name="q1" value="sometimes">
+                    <span>Yes, occasionally</span>
+                </label>
+                <label class="survey-option">
+                    <input type="radio" name="q1" value="no">
+                    <span>No, never</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="survey-question">
+            <label>2. Do you believe AI integration can improve learning outcomes?<span class="required-star">*</span></label>
+            <div class="survey-options">
+                <label class="survey-option">
+                    <input type="radio" name="q2" value="yes" required>
+                    <span>Yes</span>
+                </label>
+                <label class="survey-option">
+                    <input type="radio" name="q2" value="no">
+                    <span>No</span>
+                </label>
+                <label class="survey-option">
+                    <input type="radio" name="q2" value="unsure">
+                    <span>Unsure</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="survey-question">
+            <label>3. Would you support more AI-assisted learning in your classes?<span class="required-star">*</span></label>
+            <div class="survey-options">
+                <label class="survey-option">
+                    <input type="radio" name="q3" value="yes" required>
+                    <span>Yes, definitely</span>
+                </label>
+                <label class="survey-option">
+                    <input type="radio" name="q3" value="maybe">
+                    <span>Maybe, with proper guidelines</span>
+                </label>
+                <label class="survey-option">
+                    <input type="radio" name="q3" value="no">
+                    <span>No, I prefer traditional methods</span>
+                </label>
+            </div>
+        </div>
+
+        <button class="front-page-button" id="submitSurvey" disabled>Submit Survey</button>
+
+        <div class="survey-footer">
+            <p>Thank you for participating in this research study.<br>
+            Ethics Committee Approved | Research ID: EDU-AI-2025-001</p>
+        </div>
     </div>
 
     <!-- Landing Page (Hidden Initially) -->
@@ -1685,7 +1963,7 @@
             <!-- Funny/Cute GIF -->
             <div class="gif-container show">
                 <h3 style="color: white; margin-bottom: 20px;">This is us! 😄</h3>
-                 <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnppbWMwaWloNnlyNG13YTNlOHBmbGphbTU0MnhjN2drbndiemNhOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3QKEujo8vztC/giphy.gif" alt="Cute Love GIF">
+                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnppbWMwaWloNnlyNG13YTNlOHBmbGphbTU0MnhjN2drbndiemNhOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W3QKEujo8vztC/giphy.gif" alt="Cute Love GIF">
             </div>
 
             <!-- Love Meter -->
@@ -1723,24 +2001,23 @@
                 </div>
             </div>
 
-
             <!-- Letter -->
             <div class="letter">
-                <h2>To My Special Someone</h2>
+                <h2>U Are Special to me</h2>
                 <p>Everything changed for the better as soon as you entered my life. Your laughter is my favorite sound in the world.</p>
                 
                 <p>I cherish every second we spend together. I appreciate you being who you are, your warmth and kindness, and how much you love me.</p>
                 
                 <p>I want you to know how much you mean to me on this Valentine's Day. Cheers to many more wonderful moments spent with each other!</p>
                 
-                <div class="signature">With all my love💕</div>
+                <div class="signature">With all my love 💕</div>
             </div>
 
             <!-- Extra Polaroid Photo Wall -->
             <div class="photo-wall show">
                 <h3>Our Favorite Moments 📸</h3>
                 <div class="polaroid-grid">
-                   <div class="polaroid">
+                    <div class="polaroid">
                         <img src="picture/picture4.jpg" alt="Memory">
                         <div class="caption">Love this moment</div>
                    </div>
@@ -1768,8 +2045,7 @@
                         <img src="picture/picture6.jpg" alt="Memory">
                         <div class="caption">.5</div>
                    </div>
-
-                </div>
+               </div>
             </div>
 
 
@@ -1786,30 +2062,53 @@
                 <p>Thank you for being you!</p>
                 <!-- Another funny GIF -->
                 <div class="gif-container show" style="margin-top: 20px;">
-                    <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHQ5NDZ0NXJlNmpzdDFpNnNlMjFscjY4aWdiN2ViNmdtajB2azB1OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7abGQa0aRJUurpII/giphy.gif" alt="Celebration GIF">
+                   <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHQ5NDZ0NXJlNmpzdDFpNnNlMjFscjY4aWdiN2ViNmdtajB2azB1OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7abGQa0aRJUurpII/giphy.gif" alt="Celebration GIF">
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Front page transition to landing page
-        const continueButton = document.getElementById('continueButton');
+        // Survey form validation and submission
+        const submitButton = document.getElementById('submitSurvey');
         const frontPage = document.getElementById('frontPage');
         const landingPage = document.getElementById('landingPage');
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
 
-        continueButton.addEventListener('click', function() {
-            // Fade out front page
-            frontPage.style.opacity = '0';
-            frontPage.style.transition = 'opacity 0.8s ease';
+        // Enable submit button when all required questions are answered
+        function checkFormCompletion() {
+            const q1Answered = document.querySelector('input[name="q1"]:checked');
+            const q2Answered = document.querySelector('input[name="q2"]:checked');
+            const q3Answered = document.querySelector('input[name="q3"]:checked');
             
+            if (q1Answered && q2Answered && q3Answered) {
+                submitButton.disabled = false;
+                submitButton.style.background = '#667eea';
+            }
+        }
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', checkFormCompletion);
+        });
+
+        submitButton.addEventListener('click', function() {
+            // Show "processing" state
+            submitButton.textContent = 'Processing...';
+            submitButton.disabled = true;
+            
+            // Fade out front page after a short delay to seem realistic
             setTimeout(() => {
-                frontPage.style.display = 'none';
-                landingPage.classList.add('active');
+                frontPage.style.opacity = '0';
+                frontPage.style.transition = 'opacity 0.8s ease';
                 
-                // Show cute decorations
-                document.body.classList.add('decorations-visible');
-            }, 800);
+                setTimeout(() => {
+                    frontPage.style.display = 'none';
+                    landingPage.classList.add('active');
+                    
+                    // Show cute decorations
+                    document.body.classList.add('decorations-visible');
+                }, 800);
+            }, 1000);
         });
 
         // Landing page transition
