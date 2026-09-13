@@ -1912,6 +1912,20 @@ body.decorations-visible { background:#fff; color:#222; display:block; min-heigh
  #mainContent .polaroid-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 12px; }
  #mainContent .photo-wall { padding-top:32px; }
 }
+#mainContent .photo-track { display:flex; width:max-content; gap:12px; animation:memory-drift 26s linear infinite; }
+#mainContent .photo-item,#mainContent .photo-item:nth-child(n+4) { display:block; flex:0 0 clamp(220px,32vw,390px); width:clamp(220px,32vw,390px); height:300px; border-radius:14px; }
+#mainContent .photo-item img { animation:memory-zoom 10s ease-in-out infinite alternate; }
+#mainContent .polaroid { animation:memory-float 6s ease-in-out infinite; }
+#mainContent .polaroid:nth-child(2n) { animation-delay:-2s; }
+#mainContent .polaroid:nth-child(3n) { animation-delay:-4s; }
+#mainContent .photo-gallery:hover .photo-track { animation-play-state:paused; }
+#mainContent .photos-paused .photo-track,#mainContent .photos-paused .photo-item img,#mainContent .photos-paused .polaroid { animation-play-state:paused; }
+#mainContent #photoMotion { grid-column:1/-1; justify-self:end; color:#222; background:#f7f7f7; font-size:13px!important; padding:10px 16px; }
+#mainContent #noButton { touch-action:none; transition:background .2s; }
+@keyframes memory-drift { to { transform:translateX(calc(-50% - 6px)); } }
+@keyframes memory-zoom { from { transform:scale(1); } to { transform:scale(1.07); } }
+@keyframes memory-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+@media(max-width:743px) { #mainContent .photo-item,#mainContent .photo-item:nth-child(n+4) { height:260px; } }
 @media(prefers-reduced-motion:reduce) {
  #landingPage,#landingPage *,#mainContent,#mainContent * { animation:none!important; transition:none!important; }
  .decorations-visible .confetti,.decorations-visible .particle { display:none; }
@@ -2093,7 +2107,8 @@ body.decorations-visible { background:#fff; color:#222; display:block; min-heigh
                 </div>
             </div>
 
-            <!-- Letter -->
+            <button id="photoMotion" type="button" aria-pressed="false">Pause photo motion</button>
+<!-- Letter -->
             <div class="letter">
                 <h2>You make the ordinary special.</h2>
                 <p>Everything changed for the better as soon as you entered my life. Your laughter is my favorite sound in the world.</p>
@@ -2377,46 +2392,45 @@ body.decorations-visible { background:#fff; color:#222; display:block; min-heigh
             "Think about it... 🤔"
         ];
 
-        // Make NO button dodge the mouse
-        noButton.addEventListener('mouseover', function() {
-            const maxX = window.innerWidth - noButton.offsetWidth - 100;
-            const maxY = window.innerHeight - noButton.offsetHeight - 100;
-            
-            const randomX = Math.random() * (maxX - 100) + 50;
-            const randomY = Math.random() * (maxY - 100) + 50;
-            
-            noButton.style.left = randomX + 'px';
-            noButton.style.top = randomY + 'px';
-            
-            // Add shake animation
-            noButton.classList.add('shake');
-            setTimeout(() => noButton.classList.remove('shake'), 300);
-            
-            // Change question text with funny messages
-            if (noButtonClicks < funnyMessages.length) {
-                questionContainer.querySelector('p').textContent = funnyMessages[noButtonClicks];
-                noButtonClicks++;
+        // Pointer events support both a mouse and a real touchscreen.
+        let lastDodge = 0;
+        function resetNoButton() {
+            noButton.style.position = '';
+            noButton.style.left = '';
+            noButton.style.top = '';
+        }
+        function dodgeNoButton(event) {
+            if (event.type === 'pointerenter' && event.pointerType !== 'mouse') return;
+            if (event.cancelable) event.preventDefault();
+            const now = performance.now();
+            if (now - lastDodge < 180) return;
+            lastDodge = now;
+            const old = noButton.getBoundingClientRect();
+            const yes = yesButton.getBoundingClientRect();
+            const viewport = window.visualViewport;
+            const left = (viewport?.offsetLeft || 0) + 16;
+            const top = (viewport?.offsetTop || 0) + 16;
+            const maxX = left + Math.max(0,(viewport?.width || innerWidth) - old.width - 32);
+            const maxY = top + Math.max(0,(viewport?.height || innerHeight) - old.height - 32);
+            let chosen = null;
+            for (let i=0; i<50; i++) {
+                const x = left + Math.random() * (maxX-left);
+                const y = top + Math.random() * (maxY-top);
+                const overlapsYes = x < yes.right+16 && x+old.width > yes.left-16 && y < yes.bottom+16 && y+old.height > yes.top-16;
+                if (!overlapsYes && Math.hypot(x-old.left,y-old.top)>70) { chosen={x,y}; break; }
             }
-            
-            // Make YES button bigger
-            const currentSize = parseFloat(getComputedStyle(yesButton).fontSize);
-            yesButton.style.fontSize = (currentSize + 2) + 'px';
-        });
-
-        // NO button click (just in case they catch it)
-        noButton.addEventListener('click', function() {
-            // Make it dodge anyway!
-            const maxX = window.innerWidth - noButton.offsetWidth - 100;
-            const maxY = window.innerHeight - noButton.offsetHeight - 100;
-            
-            const randomX = Math.random() * (maxX - 100) + 50;
-            const randomY = Math.random() * (maxY - 100) + 50;
-            
-            noButton.style.left = randomX + 'px';
-            noButton.style.top = randomY + 'px';
-            
-            questionContainer.querySelector('p').textContent = "Nice try! But click YES! 😄";
-        });
+            if (!chosen) return;
+            noButton.style.position = 'fixed';
+            noButton.style.left = chosen.x+'px';
+            noButton.style.top = chosen.y+'px';
+            questionContainer.querySelector('p').textContent = funnyMessages[noButtonClicks++ % funnyMessages.length];
+        }
+        noButton.addEventListener('pointerenter', dodgeNoButton);
+        noButton.addEventListener('pointerdown', dodgeNoButton);
+        noButton.addEventListener('click', dodgeNoButton);
+        window.addEventListener('resize', resetNoButton);
+        window.addEventListener('scroll', resetNoButton, {passive:true});
+        window.visualViewport?.addEventListener('resize', resetNoButton);
 
         // YES button click
         yesButton.addEventListener('click', function() {
@@ -2515,8 +2529,16 @@ body.decorations-visible { background:#fff; color:#222; display:block; min-heigh
 for (const id of ['mainHeart','giftBox']) {
  document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.currentTarget.click();}});
 }
-document.getElementById('noButton').addEventListener('mouseover',e=>{e.currentTarget.style.position='fixed';},true);
-document.getElementById('noButton').addEventListener('click',e=>{e.currentTarget.style.position='fixed';},true);
+const motionButton=document.getElementById('photoMotion');
+const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
+motionButton.hidden=motionPreference.matches;
+motionPreference.addEventListener('change',e=>{motionButton.hidden=e.matches;});
+motionButton.addEventListener('click',()=>{
+ const paused=document.getElementById('giftOpened').classList.toggle('photos-paused');
+ motionButton.setAttribute('aria-pressed',String(paused));
+ motionButton.textContent=paused?'Resume photo motion':'Pause photo motion';
+});
+document.querySelectorAll('#photoTrack .photo-item:nth-child(n+4)').forEach(el=>el.setAttribute('aria-hidden','true'));
 document.querySelectorAll('#mainContent img').forEach((img,i)=>{
  const fallback=()=>{
   img.onerror=null;
